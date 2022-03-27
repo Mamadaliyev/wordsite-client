@@ -33,7 +33,7 @@
               </div>
               <span> {{ word.defination }} </span>
               <div class="tags">
-                <span v-for="tag in word.tags" :key="tag" class="text item">
+                <span v-for="tag in word.tags" :key="tag._id" class="text item">
                   <a href="" @click="handleTag(tag)"> {{ `#${tag}` }} </a>
                 </span>
               </div>
@@ -60,6 +60,24 @@
               v-model="form.defination"
             >
             </el-input>
+          </el-form-item>
+          <el-form-item label="Tags" :label-width="formLabelWidth">
+            <el-select
+              v-model="form.tags"
+              multiple
+              filterable
+              allow-create
+              default-first-option
+              placeholder="Choose tags for your words"
+            >
+              <el-option
+                v-for="(tag, index) in form.tags"
+                :key="index"
+                :label="tag"
+                :value="tag"
+              >
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item :label-width="formLabelWidth">
             <el-checkbox v-model="form.isPrivate">Private</el-checkbox>
@@ -148,14 +166,15 @@ export default {
       }
     },
     handleEdit(word) {
+      console.log("handle edit", word);
       this.dialogFormVisible = true;
-      console.log(word);
       this.form = word;
       this.isEdit = true;
     },
     async handleEditSubmit() {
       try {
         this.isLoading = true;
+        console.log(this.form);
         const payload = {
           ...this.form,
         };
@@ -199,6 +218,9 @@ export default {
       } finally {
         this.isLoading = false;
       }
+    },
+    handleTagChange(tag) {
+      console.log(tag);
     },
   },
 };
