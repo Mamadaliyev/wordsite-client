@@ -1,15 +1,23 @@
 <template>
   <div class="my-words">
     <el-row class="add-row">
-      <el-col :offset="2" :span="22">
+      <el-col :offset="2" :span="16">
         <el-button @click="handleAdd" type="primary"
           ><i class="el-icon-plus"></i> Add word
         </el-button>
       </el-col>
+      <el-col :span="4">
+        <el-input
+          suffix-icon="el-icon-search"
+          placeholder="Search"
+          v-model="filter.search"
+          @input.native="getMyWords"
+        ></el-input>
+      </el-col>
     </el-row>
     <el-row class="top-row">
       <el-col :span="20">
-        <el-row :gutter="10" class="inner-row">
+        <el-row v-if="!isLoading" :gutter="10" class="inner-row">
           <el-col v-for="(word, index) in myWords" :key="index" :span="4">
             <el-card class="box-card">
               <div slot="header" class="clearfix">
@@ -25,17 +33,21 @@
               </div>
               <span> {{ word.defination }} </span>
               <div class="tags">
-                <span v-for="o in 4" :key="o" class="text item">
-                  <a href="" @click="handleTag(o)"> {{ `#tag${0}` }} </a>
+                <span v-for="tag in word.tags" :key="tag" class="text item">
+                  <a href="" @click="handleTag(tag)"> {{ `#${tag}` }} </a>
                 </span>
               </div>
             </el-card>
           </el-col>
         </el-row>
+        <div class="loading" v-else v-loading="isLoading"></div>
       </el-col>
     </el-row>
     <div>
-      <el-dialog :title="dialogLabel" :visible.sync="dialogFormVisible">
+      <el-dialog
+        :title="isEdit ? 'Edit word' : 'Add word'"
+        :visible.sync="dialogFormVisible"
+      >
         <el-form :model="form">
           <el-form-item label="Name" :label-width="formLabelWidth">
             <el-input v-model="form.name" autocomplete="off"></el-input>
@@ -49,10 +61,16 @@
             >
             </el-input>
           </el-form-item>
+          <el-form-item :label-width="formLabelWidth">
+            <el-checkbox v-model="form.isPrivate">Private</el-checkbox>
+          </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">Cancel</el-button>
-          <el-button type="primary" @click="dialogFormVisible = false"
+          <el-button type="primary" v-if="isEdit" @click="handleEditSubmit"
+            >Save</el-button
+          >
+          <el-button type="primary" v-else @click="handleAddSubmit"
             >Save</el-button
           >
         </span>
@@ -62,71 +80,34 @@
 </template>
 
 <script>
+import axios from "axios";
+import { config } from "../config";
 export default {
   name: "MyWordsView",
   data() {
     return {
-      dialogLabel: "Edit Word",
+      isEdit: true,
       dialogFormVisible: false,
+      isLoading: false,
+      search: "",
       form: {
         name: "",
         defination: "",
         tags: [],
+        _id: "",
+        isPrivate: true,
       },
       formLabelWidth: "120px",
-      myWords: [
-        {
-          name: "car",
-          defination: "moshina",
-          tags: ["vehicle"],
-        },
-        {
-          name: "car",
-          defination: "moshina",
-          tags: ["vehicle"],
-        },
-        {
-          name: "car",
-          defination: "moshina",
-          tags: ["vehicle"],
-        },
-        {
-          name: "car",
-          defination: "moshina",
-          tags: ["vehicle"],
-        },
-        {
-          name: "car",
-          defination: "moshina",
-          tags: ["vehicle"],
-        },
-        {
-          name: "car",
-          defination: "moshina",
-          tags: ["vehicle"],
-        },
-        {
-          name: "car",
-          defination: "moshina",
-          tags: ["vehicle"],
-        },
-        {
-          name: "car",
-          defination: "moshina",
-          tags: ["vehicle"],
-        },
-        {
-          name: "car",
-          defination: "moshina",
-          tags: ["vehicle"],
-        },
-        {
-          name: "car",
-          defination: "moshina",
-          tags: ["vehicle"],
-        },
-      ],
+      myWords: [],
+      filter: {
+        search: "",
+        page: 1,
+        limit: 20,
+      },
     };
+  },
+  created() {
+    this.getMyWords();
   },
   methods: {
     handleTag(tag) {
@@ -137,15 +118,87 @@ export default {
         name: "",
         defination: "",
         tags: [],
+        isPrivate: true,
       };
       this.dialogFormVisible = true;
-      this.dialogLabel = "Add Word";
+      this.isEdit = false;
+    },
+    async handleAddSubmit() {
+      try {
+        this.isLoading = true;
+        const payload = {
+          ...this.form,
+        };
+        const headers = {
+          Authorization: `Bearer ${this.$store.state.token}`,
+        };
+        const { data } = await axios.post(
+          `${config.BASE_URL}/word/create`,
+          payload,
+          { headers: headers }
+        );
+        console.log(data);
+      } catch (e) {
+        console.log(e);
+        this.$message.error("Something wrong");
+      } finally {
+        this.dialogFormVisible = false;
+        this.isLoading = false;
+        this.getMyWords();
+      }
     },
     handleEdit(word) {
       this.dialogFormVisible = true;
       console.log(word);
       this.form = word;
-      this.dialogLabel = "Edit Word";
+      this.isEdit = true;
+    },
+    async handleEditSubmit() {
+      try {
+        this.isLoading = true;
+        const payload = {
+          ...this.form,
+        };
+        const headers = {
+          Authorization: `Bearer ${this.$store.state.token}`,
+        };
+        const { data } = await axios.put(
+          `${config.BASE_URL}/word/update/${this.form._id}`,
+          payload,
+          { headers: headers }
+        );
+        console.log(data);
+      } catch (e) {
+        console.log(e);
+        this.$message.error("Something wrong");
+      } finally {
+        this.dialogFormVisible = false;
+        this.isLoading = false;
+        this.getMyWords();
+      }
+    },
+    async getMyWords() {
+      try {
+        this.isLoading = true;
+        const payload = {
+          ...this.filter,
+        };
+        const headers = {
+          Authorization: `Bearer ${this.$store.state.token}`,
+        };
+        const { data } = await axios.post(
+          `${config.BASE_URL}/word/words`,
+          payload,
+          { headers: headers }
+        );
+        console.log(data);
+        this.myWords = data.data.data;
+      } catch (e) {
+        console.log(e);
+        this.$message.error("Something wrong");
+      } finally {
+        this.isLoading = false;
+      }
     },
   },
 };
@@ -172,6 +225,12 @@ export default {
         }
       }
     }
+  }
+  .loading {
+    display: flex;
+    justify-content: center;
+    flex-flow: column;
+    align-items: center;
   }
 }
 </style>

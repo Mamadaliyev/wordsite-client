@@ -11,7 +11,6 @@
           <el-tab-pane label="My profile" name="my-profile"
             ><my-profile
           /></el-tab-pane>
-          <el-tab-pane label="My words" name="my-words">My words</el-tab-pane>
           <el-tab-pane label="Settings" name="settings">Settings</el-tab-pane>
           <el-tab-pane label="Logout" name="logout">Logout</el-tab-pane>
         </el-tabs>

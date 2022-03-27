@@ -1,10 +1,113 @@
 <template>
-  <div class="home">Home</div>
+  <div class="home">
+    <el-row class="header">
+      <el-col :offset="18" :span="4">
+        <el-input
+          suffix-icon="el-icon-search"
+          placeholder="Search"
+          v-model="filter.search"
+          @input.native="getWords"
+        ></el-input>
+      </el-col>
+    </el-row>
+    <el-row class="top-row">
+      <el-col :span="20">
+        <el-row :gutter="10" class="inner-row">
+          <el-col v-for="(word, index) in words" :key="index" :span="4">
+            <el-card class="box-card">
+              <div slot="header" class="clearfix">
+                <span>
+                  <b> {{ word.name }} </b></span
+                >
+              </div>
+              <span> {{ word.defination }} </span>
+              <div class="tags">
+                <span v-for="tag in word.tags" :key="tag" class="text item">
+                  <a href="" @click="handleTag(tag)"> {{ `#${tag}` }} </a>
+                </span>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script>
+import axios from "axios";
+import { config } from "../config";
+
 export default {
   name: "HomeView",
   components: {},
+  data() {
+    return {
+      search: "",
+      isLoading: false,
+      filter: {
+        search: "",
+        page: 1,
+        limit: 20,
+      },
+      words: [],
+    };
+  },
+  created() {
+    this.getWords();
+  },
+  methods: {
+    handleTag(tag) {
+      this.$router.push({ path: `/tags?tag=${tag}` });
+    },
+    async getWords() {
+      try {
+        this.isLoading = true;
+        const payload = {
+          ...this.filter,
+        };
+        const headers = {
+          Authorization: `Bearer ${this.$store.state.token}`,
+        };
+        const { data } = await axios.post(
+          `${config.BASE_URL}/word/public`,
+          payload,
+          { headers: headers }
+        );
+        console.log(data);
+        this.words = data.data.data;
+      } catch (e) {
+        console.log(e);
+        this.$message.error("Something wrong");
+      } finally {
+        this.isLoading = false;
+      }
+    },
+  },
 };
 </script>
+
+<style scoped lang="scss">
+.home {
+  margin-top: 20px;
+  .add-row {
+    margin-bottom: 20px;
+  }
+  .top-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .inner-row {
+      .el-col {
+        margin-top: 10px;
+      }
+      .tags {
+        margin-top: 20px;
+        a {
+          text-decoration: none;
+        }
+      }
+    }
+  }
+}
+</style>
