@@ -1,9 +1,10 @@
 <template>
-  <div>AddWordView</div>
+  <div class="words"></div>
 </template>
 
 <script>
 export default {
-  name: "AddWordView",
+  name: "Words",
+  components: {},
 };
 </script>

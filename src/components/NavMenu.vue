@@ -7,6 +7,7 @@
           <div>
             <li v-for="(menu, index) in menus" :key="index">
               <span
+                v-if="!menu.hasAuth || isAuthenticated"
                 v-bind:class="{ active: currentRouteName == menu.routeName }"
                 @click="handleMenu(menu.routeName)"
                 >{{ menu.name }}</span
@@ -50,18 +51,22 @@ export default {
         {
           name: "Home",
           routeName: "home",
+          hasAuth: false,
         },
         {
           name: "Tags",
           routeName: "tags",
+          hasAuth: false,
         },
         {
           name: "Quiz",
           routeName: "quiz",
+          hasAuth: false,
         },
         {
-          name: "Add word",
-          routeName: "add-word",
+          name: "My words",
+          routeName: "my-words",
+          hasAuth: true,
         },
       ],
     };

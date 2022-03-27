@@ -4,7 +4,7 @@ import HomeView from "../views/HomeView.vue";
 import SigninView from "../views/SigninView.vue";
 import SignupView from "../views/SignupView.vue";
 import ProfileView from "../views/ProfileView.vue";
-import AddWordView from "../views/AddWordView.vue";
+import MyWordsView from "../views/MyWordsView.vue";
 import Tags from "../views/TagsView.vue";
 import Quiz from "../views/QuizView.vue";
 import store from "../store";
@@ -61,9 +61,9 @@ const routes = [
     },
   },
   {
-    path: "/add-word",
-    name: "add-word",
-    component: AddWordView,
+    path: "/my-words",
+    name: "my-words",
+    component: MyWordsView,
     meta: {
       requiresAuth: false,
     },
