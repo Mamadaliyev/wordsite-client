@@ -31,6 +31,17 @@
         </el-row>
       </el-col>
     </el-row>
+    <div class="pagination">
+      <el-pagination
+        :page-size="filter.limit"
+        :current-page="filter.page"
+        background
+        layout="prev, pager, next"
+        :total="filter.total"
+        @current-change="handlePagingChange"
+      >
+      </el-pagination>
+    </div>
   </div>
 </template>
 
@@ -49,6 +60,7 @@ export default {
         search: "",
         page: 1,
         limit: 20,
+        total: 20,
       },
       words: [],
     };
@@ -74,7 +86,7 @@ export default {
           payload,
           { headers: headers }
         );
-        console.log(data);
+        this.filter.total = data.data.total;
         this.words = data.data.data;
       } catch (e) {
         console.log(e);
@@ -82,6 +94,10 @@ export default {
       } finally {
         this.isLoading = false;
       }
+    },
+    handlePagingChange(page) {
+      this.filter.page = page;
+      this.getWords();
     },
   },
 };
@@ -108,6 +124,11 @@ export default {
         }
       }
     }
+  }
+  .pagination {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
   }
 }
 </style>

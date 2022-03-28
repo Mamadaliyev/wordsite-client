@@ -12,44 +12,83 @@
     <el-row class="top-row">
       <el-col :span="20">
         <el-row :gutter="10" class="inner-row">
-          <el-col v-for="(tag, index) in myTags" :key="index" :span="4">
+          <el-col v-for="(tag, index) in tags" :key="index" :span="4">
             <el-card class="box-card">
               <div>
-                <span>
-                  <b> {{ tag.name }} </b></span
-                >
+                <span class="tag" @click="handleTagClick(tag)">
+                  #{{ tag.name }}
+                </span>
               </div>
             </el-card>
           </el-col>
         </el-row>
       </el-col>
     </el-row>
+    <div class="pagination">
+      <el-pagination
+        :page-size="filter.limit"
+        :current-page="filter.page"
+        background
+        layout="prev, pager, next"
+        :total="filter.total"
+        @current-change="handlePagingChange"
+      >
+      </el-pagination>
+    </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+import { config } from "../config";
+
 export default {
   name: "TagsView",
   data() {
     return {
       search: "",
-      myTags: [
-        {
-          name: "car",
-          defination: "moshina",
-          tags: ["vehicle"],
-        },
-        {
-          name: "car",
-          defination: "moshina",
-          tags: ["vehicle"],
-        },
-      ],
+      tags: [],
+      filter: {
+        search: "",
+        page: 1,
+        limit: 20,
+        total: 20,
+      },
     };
   },
+  created() {
+    this.getTags();
+  },
   methods: {
-    handleTag(tag) {
-      this.$router.push({ path: `/tags?tag=${tag}` });
+    handleTagClick(tag) {
+      this.$router.push({ path: `/?tag=${tag.name}` });
+    },
+    async getTags() {
+      try {
+        this.isLoading = true;
+        const payload = {
+          ...this.filter,
+        };
+        const headers = {
+          Authorization: `Bearer ${this.$store.state.token}`,
+        };
+        const { data } = await axios.post(
+          `${config.BASE_URL}/tag/tags`,
+          payload,
+          { headers: headers }
+        );
+        this.filter.total = data.data.total;
+        this.tags = data.data.data;
+      } catch (e) {
+        console.log(e);
+        this.$message.error("Something wrong");
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    handlePagingChange(page) {
+      this.filter.page = page;
+      this.getTags();
     },
   },
 };
@@ -76,6 +115,15 @@ export default {
         }
       }
     }
+  }
+  .tag {
+    cursor: pointer;
+    color: blue;
+  }
+  .pagination {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
   }
 }
 </style>

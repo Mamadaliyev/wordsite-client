@@ -64,6 +64,7 @@
           <el-form-item label="Tags" :label-width="formLabelWidth">
             <el-select
               v-model="form.tags"
+              style="width: 100%"
               multiple
               filterable
               allow-create
@@ -84,15 +85,35 @@
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
-          <el-button @click="dialogFormVisible = false">Cancel</el-button>
-          <el-button type="primary" v-if="isEdit" @click="handleEditSubmit"
-            >Save</el-button
-          >
-          <el-button type="primary" v-else @click="handleAddSubmit"
-            >Save</el-button
-          >
+          <div style="display: flex; justify-content: space-between">
+            <div>
+              <el-button type="danger" @click="handleDelete">
+                <i class="el-icon-delete"></i>
+              </el-button>
+            </div>
+            <div style="display: flex">
+              <el-button @click="dialogFormVisible = false">Cancel</el-button>
+              <el-button type="primary" v-if="isEdit" @click="handleEditSubmit"
+                >Save</el-button
+              >
+              <el-button type="primary" v-else @click="handleAddSubmit"
+                >Save</el-button
+              >
+            </div>
+          </div>
         </span>
       </el-dialog>
+    </div>
+    <div class="pagination">
+      <el-pagination
+        :page-size="filter.limit"
+        :current-page="filter.page"
+        background
+        layout="prev, pager, next"
+        :total="filter.total"
+        @current-change="handlePagingChange"
+      >
+      </el-pagination>
     </div>
   </div>
 </template>
@@ -121,6 +142,7 @@ export default {
         search: "",
         page: 1,
         limit: 20,
+        total: 20,
       },
     };
   },
@@ -140,6 +162,23 @@ export default {
       };
       this.dialogFormVisible = true;
       this.isEdit = false;
+    },
+    async handleDelete() {
+      try {
+        this.isLoading = true;
+        const headers = {
+          Authorization: `Bearer ${this.$store.state.token}`,
+        };
+        await axios.delete(`${config.BASE_URL}/word/delete/${this.form._id}`, {
+          headers: headers,
+        });
+        this.getMyWords();
+      } catch (e) {
+        this.$message.error("Something wrong");
+      } finally {
+        this.isLoading = false;
+        this.dialogFormVisible = false;
+      }
     },
     async handleAddSubmit() {
       try {
@@ -166,7 +205,6 @@ export default {
       }
     },
     handleEdit(word) {
-      console.log("handle edit", word);
       this.dialogFormVisible = true;
       this.form = word;
       this.isEdit = true;
@@ -181,12 +219,11 @@ export default {
         const headers = {
           Authorization: `Bearer ${this.$store.state.token}`,
         };
-        const { data } = await axios.put(
+        await axios.put(
           `${config.BASE_URL}/word/update/${this.form._id}`,
           payload,
           { headers: headers }
         );
-        console.log(data);
       } catch (e) {
         console.log(e);
         this.$message.error("Something wrong");
@@ -210,7 +247,7 @@ export default {
           payload,
           { headers: headers }
         );
-        console.log(data);
+        this.filter.total = data.data.total;
         this.myWords = data.data.data;
       } catch (e) {
         console.log(e);
@@ -219,8 +256,9 @@ export default {
         this.isLoading = false;
       }
     },
-    handleTagChange(tag) {
-      console.log(tag);
+    handlePagingChange(page) {
+      this.filter.page = page;
+      this.getMyWords();
     },
   },
 };
@@ -253,6 +291,11 @@ export default {
     justify-content: center;
     flex-flow: column;
     align-items: center;
+  }
+  .pagination {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
   }
 }
 </style>

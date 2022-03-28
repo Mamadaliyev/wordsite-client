@@ -61,7 +61,7 @@ export default {
         {
           name: "Quiz",
           routeName: "quiz",
-          hasAuth: false,
+          hasAuth: true,
         },
         {
           name: "My words",

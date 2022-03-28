@@ -41,7 +41,7 @@ const routes = [
     name: "profile",
     component: ProfileView,
     meta: {
-      requiresAuth: false,
+      requiresAuth: true,
     },
   },
   {
@@ -57,7 +57,7 @@ const routes = [
     name: "quiz",
     component: Quiz,
     meta: {
-      requiresAuth: false,
+      requiresAuth: true,
     },
   },
   {
@@ -65,7 +65,7 @@ const routes = [
     name: "my-words",
     component: MyWordsView,
     meta: {
-      requiresAuth: false,
+      requiresAuth: true,
     },
   },
   {
@@ -90,14 +90,15 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (!store.state.token && from.name !== "sign-in") {
+    if (!store.state.token && from.name !== to.name) {
       router.push({
         name: "sign-in",
       });
+    } else {
+      next();
     }
-  } else {
-    next();
   }
+  next();
 });
 
 export default router;
