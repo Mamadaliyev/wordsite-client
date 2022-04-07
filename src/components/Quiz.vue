@@ -12,7 +12,7 @@
             <div
               v-bind:class="{
                 success:
-                  (variant.isSelected && variant.isAnswer) ||
+                  (variant.isAnswered && variant.isCorrect) ||
                   (quiz.isCompleted && variant.isAnswer),
                 error: variant.isSelected && !variant.isAnswer,
               }"
@@ -52,9 +52,9 @@ export default {
   },
   methods: {
     handleAnswer(variant) {
-      if (this.quiz.isCompleted) return;
-      variant.isSelected = true;
-      this.quiz.isCompleted = true;
+      if (this.quiz.isAnswered) return;
+      variant.isAnswered = true;
+      this.quiz.isAnswered = true;
 
       setTimeout(() => {
         this.$emit("answer", variant.isAnswer);
