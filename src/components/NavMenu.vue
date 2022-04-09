@@ -1,7 +1,11 @@
 <template>
   <div>
     <el-row class="nav-menu">
-      <el-col :span="4"> <span> logo </span> </el-col>
+      <el-col :span="4">
+        <div class="logo">
+          <span>Wordsite</span>
+        </div>
+      </el-col>
       <el-col :span="20">
         <ul class="topnav">
           <div>
@@ -92,6 +96,14 @@ export default {
 .nav-menu {
   background-color: #333;
   font-size: 18px;
+  .logo {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    height: 100%;
+  }
 }
 ul.topnav {
   height: 70px;
