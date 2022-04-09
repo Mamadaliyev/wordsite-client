@@ -22,7 +22,7 @@
               </div>
               <span> {{ word.defination }} </span>
               <div class="tags">
-                <span v-for="tag in word.tags" :key="tag" class="text item">
+                <span v-for="tag in word.tags" :key="tag._id" class="text item">
                   <a href="" @click="handleTag(tag)"> {{ `#${tag}` }} </a>
                 </span>
               </div>

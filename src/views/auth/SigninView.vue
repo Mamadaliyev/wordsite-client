@@ -43,9 +43,9 @@
 </template>
 
 <script>
-import { config } from "../config";
+import { config } from "../../config";
 import axios from "axios";
-import store from "../store";
+import store from "../../store";
 
 export default {
   name: "SigninView",

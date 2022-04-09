@@ -1,12 +1,13 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import HomeView from "../views/HomeView.vue";
-import SigninView from "../views/SigninView.vue";
-import SignupView from "../views/SignupView.vue";
+import SigninView from "../views/auth/SigninView.vue";
+import SignupView from "../views/auth/SignupView.vue";
 import ProfileView from "../views/ProfileView.vue";
-import MyWordsView from "../views/MyWordsView.vue";
+import MyWordsView from "../views/words/MyWordsView.vue";
 import Tags from "../views/TagsView.vue";
-import Quiz from "../views/QuizView.vue";
+import Quiz from "../views/quiz/QuizView.vue";
+import QuizTestView from "../views/quiz/QuizTestView";
 import store from "../store";
 
 Vue.use(VueRouter);
@@ -56,6 +57,14 @@ const routes = [
     path: "/quiz",
     name: "quiz",
     component: Quiz,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/quiz/test",
+    name: "quiz-test",
+    component: QuizTestView,
     meta: {
       requiresAuth: true,
     },

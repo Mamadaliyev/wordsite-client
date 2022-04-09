@@ -11,10 +11,12 @@
           >
             <div
               v-bind:class="{
-                success:
-                  (variant.isAnswered && variant.isCorrect) ||
-                  (quiz.isCompleted && variant.isAnswer),
-                error: variant.isSelected && !variant.isAnswer,
+                success: quiz.isAnswered && variant.wordId == quiz.wordId,
+                error:
+                  quiz.isAnswered &&
+                  quiz.selectedId &&
+                  !quiz.isCorrect &&
+                  variant.wordId == quiz.selectedId,
               }"
               class="variant"
               @click="handleAnswer(variant)"
@@ -32,6 +34,8 @@
 </template>
 
 <script>
+import { config } from "@/config";
+import axios from "axios";
 export default {
   name: "QuizComp",
   props: ["question"],
@@ -51,11 +55,19 @@ export default {
     if (this.question) this.quiz = this.question;
   },
   methods: {
-    handleAnswer(variant) {
+    async handleAnswer(variant) {
       if (this.quiz.isAnswered) return;
-      variant.isAnswered = true;
-      this.quiz.isAnswered = true;
-
+      try {
+        const url = `${config.BASE_URL}/quiz-item/quiz/answer/${this.quiz._id}/${variant.wordId}`;
+        const headers = {
+          Authorization: `Bearer ${this.$store.state.token}`,
+        };
+        const data = await axios.post(url, {}, { headers: headers });
+        console.log(data.data);
+        this.quiz = data.data.data;
+      } catch (e) {
+        console.log(e);
+      }
       setTimeout(() => {
         this.$emit("answer", variant.isAnswer);
       }, 1000);

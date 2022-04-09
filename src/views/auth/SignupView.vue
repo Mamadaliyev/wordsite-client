@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { config } from "../config";
+import { config } from "../../config";
 import axios from "axios";
 export default {
   name: "SignupView",
