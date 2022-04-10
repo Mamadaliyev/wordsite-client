@@ -8,6 +8,7 @@
         <el-form
           :model="formData"
           label-position="top"
+          @submit.native.prevent=""
           status-icon
           :rules="rules"
           ref="formData"
@@ -46,6 +47,7 @@
             <el-button
               style="width: 100%; margin-top: 20px"
               type="primary"
+              native-type="submit"
               @click="submitForm('formData')"
               >Submit</el-button
             >
@@ -117,12 +119,14 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
-          const payload = { ...this.formData };
-          const data = await axios.post(
-            `${config.BASE_URL}/user/register`,
-            payload
-          );
-          console.log(data);
+          try {
+            const payload = { ...this.formData };
+            await axios.post(`${config.BASE_URL}/user/register`, payload);
+            this.$router.push({ name: "sign-in" });
+          } catch (e) {
+            console.log(e.response);
+            this.$message.error("Something wrong");
+          }
         } else {
           return false;
         }

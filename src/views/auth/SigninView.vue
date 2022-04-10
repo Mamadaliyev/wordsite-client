@@ -8,6 +8,7 @@
         <el-form
           :model="formData"
           label-position="top"
+          @submit.native.prevent=""
           status-icon
           :rules="rules"
           ref="formData"
@@ -32,6 +33,7 @@
             <el-button
               style="width: 100%; margin-top: 20px"
               type="primary"
+              native-type="submit"
               @click="submitForm('formData')"
               >Submit</el-button
             >
@@ -95,18 +97,24 @@ export default {
     };
   },
   methods: {
-    submitForm(formName) {
+    submitForm(formName, e) {
+      console.log(formName, e);
       this.$refs[formName].validate(async (valid) => {
         if (valid) {
-          const payload = { ...this.formData };
-          const { data } = await axios.post(
-            `${config.BASE_URL}/user/login`,
-            payload
-          );
-          console.log(data);
-          store.commit("setToken", data.data.token);
-          store.commit("setUserData", data.data.user);
-          this.$router.push({ name: "home" });
+          try {
+            const payload = { ...this.formData };
+            const { data } = await axios.post(
+              `${config.BASE_URL}/user/login`,
+              payload
+            );
+            console.log(data);
+            store.commit("setToken", data.data.token);
+            store.commit("setUserData", data.data.user);
+            this.$router.push({ name: "home" });
+          } catch (e) {
+            console.log(e.response.data);
+            this.$message.error(e.response.data.message);
+          }
         } else {
           console.log("error submit!!");
           return false;
