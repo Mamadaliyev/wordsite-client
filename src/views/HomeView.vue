@@ -114,6 +114,10 @@ export default {
     justify-content: center;
     align-items: center;
     .inner-row {
+      display: flex;
+      .box-card {
+        height: 100%;
+      }
       .el-col {
         margin-top: 10px;
       }

@@ -275,6 +275,7 @@ export default {
     justify-content: center;
     align-items: center;
     .inner-row {
+      display: flex;
       .el-col {
         margin-top: 10px;
       }
@@ -283,6 +284,9 @@ export default {
         a {
           text-decoration: none;
         }
+      }
+      .box-card {
+        height: 100%;
       }
     }
   }
