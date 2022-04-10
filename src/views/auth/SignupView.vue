@@ -125,7 +125,7 @@ export default {
             this.$router.push({ name: "sign-in" });
           } catch (e) {
             console.log(e.response);
-            this.$message.error("Something wrong");
+            this.$message.error(e.response.data.message);
           }
         } else {
           return false;
