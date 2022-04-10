@@ -5,7 +5,12 @@
         <el-button class="new-quiz" type="primary" @click="handleNewQuiz">
           New quiz
         </el-button>
-        <el-table :data="tableData" style="width: 100%" empty-text="No data">
+        <el-table
+          :data="tableData"
+          style="width: 100%"
+          empty-text="No data"
+          @row-click="handleQuizInfo"
+        >
           <el-table-column type="index" width="50"> </el-table-column>
           <el-table-column label="Started date" width="180">
             <template slot-scope="scope">
@@ -92,6 +97,10 @@ export default {
   methods: {
     moment: function (args) {
       return moment(args);
+    },
+    handleQuizInfo(selected) {
+      console.log(selected);
+      this.$router.push({ name: "quiz-retest", params: { id: selected._id } });
     },
     getDiffMinutes(row) {
       if (!row.isFinished) return "-";

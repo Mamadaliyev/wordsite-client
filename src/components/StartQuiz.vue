@@ -16,6 +16,9 @@
 </template>
 
 <script>
+import { config } from "@/config";
+import axios from "axios";
+
 export default {
   name: "QuizDialog",
   props: {
@@ -45,12 +48,29 @@ export default {
     },
   },
   methods: {
-    startQuiz(e) {
-      e.preventDefault();
-      this.$router.push({
-        name: "quiz-test",
-        params: { size: this.settings.size },
-      });
+    async startQuiz() {
+      try {
+        this.isLoading = true;
+        const headers = {
+          Authorization: `Bearer ${this.$store.state.token}`,
+        };
+        const response = await axios.post(
+          `${config.BASE_URL}/quiz/create/${this.settings.size}`,
+          {},
+          { headers: headers }
+        );
+        const data = response.data.data;
+
+        this.$router.push({
+          name: "quiz-retest",
+          params: { id: data._id },
+        });
+      } catch (e) {
+        console.log(e);
+        this.$message.error("Something wrong");
+      } finally {
+        this.isLoading = false;
+      }
     },
   },
 };

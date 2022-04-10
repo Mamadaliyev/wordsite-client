@@ -2,7 +2,9 @@
   <div class="quiz-comp">
     <el-row class="quiz-row">
       <el-col :span="12">
-        <h3>{{ quiz.name }}</h3>
+        <h3>
+          <b> {{ index + 1 }} </b> . {{ quiz.name }}
+        </h3>
         <el-row class="variants" :gutter="20">
           <el-col
             v-for="(variant, index) in quiz.variants"
@@ -28,6 +30,22 @@
             </div>
           </el-col>
         </el-row>
+        <div class="sliders">
+          <span>
+            <el-button size="small" :disabled="index == 0" @click="handlePrev">
+              <i class="el-icon-arrow-left"></i>
+            </el-button>
+          </span>
+          <span>
+            <el-button
+              size="small"
+              :disabled="index == total - 1"
+              @click="handleNext"
+            >
+              <i class="el-icon-arrow-right"></i>
+            </el-button>
+          </span>
+        </div>
       </el-col>
     </el-row>
   </div>
@@ -38,7 +56,7 @@ import { config } from "@/config";
 import axios from "axios";
 export default {
   name: "QuizComp",
-  props: ["question"],
+  props: ["question", "index", "total", "isFinished"],
   data() {
     return {
       letters: ["A", "B", "C", "D"],
@@ -56,7 +74,7 @@ export default {
   },
   methods: {
     async handleAnswer(variant) {
-      if (this.quiz.isAnswered) return;
+      if (this.quiz.isAnswered || this.isFinished) return;
       try {
         const url = `${config.BASE_URL}/quiz-item/quiz/answer/${this.quiz._id}/${variant.wordId}`;
         const headers = {
@@ -69,8 +87,14 @@ export default {
         console.log(e);
       }
       setTimeout(() => {
-        this.$emit("answer", variant.isAnswer);
+        this.$emit("answer", this.quiz);
       }, 1000);
+    },
+    handleNext() {
+      this.$emit("next");
+    },
+    handlePrev() {
+      this.$emit("prev");
     },
   },
 };
@@ -82,6 +106,11 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    .sliders {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
     .variants {
       .variant {
         width: 100%;

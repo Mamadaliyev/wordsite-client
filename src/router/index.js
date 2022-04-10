@@ -8,6 +8,7 @@ import MyWordsView from "../views/words/MyWordsView.vue";
 import Tags from "../views/TagsView.vue";
 import Quiz from "../views/quiz/QuizView.vue";
 import QuizTestView from "../views/quiz/QuizTestView";
+import QuizInfoView from "../views/quiz/QuizInfoView";
 import store from "../store";
 
 Vue.use(VueRouter);
@@ -65,6 +66,22 @@ const routes = [
     path: "/quiz/test",
     name: "quiz-test",
     component: QuizTestView,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/quiz/test/:id",
+    name: "quiz-retest",
+    component: QuizTestView,
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: "/quiz/info/:id",
+    name: "quiz-info",
+    component: QuizInfoView,
     meta: {
       requiresAuth: true,
     },
