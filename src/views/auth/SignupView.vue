@@ -58,7 +58,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { config } from "../../config";
 import axios from "axios";
 export default {
@@ -67,7 +67,7 @@ export default {
     var confirmPassValidate = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("Please input the password again"));
-      } else if (value !== this.formData.password) {
+      } else if (value !== this.$data.formData.password) {
         callback(new Error("Passwords don't match!"));
       } else {
         callback();

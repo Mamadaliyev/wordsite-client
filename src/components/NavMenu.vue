@@ -62,7 +62,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   data() {
     return {
@@ -126,10 +126,11 @@ export default {
           new Date(this.$store.state.quiz.finishingAt) >= new Date()
         ) {
           const surat =
-            new Date(this.$store.state.quiz.finishingAt) - new Date();
+            new Date(this.$store.state.quiz.finishingAt).getTime() -
+            new Date().getTime();
           const maxraj =
-            new Date(this.$store.state.quiz.finishingAt) -
-            new Date(this.$store.state.quiz.startedAt);
+            new Date(this.$store.state.quiz.finishingAt).getTime() -
+            new Date(this.$store.state.quiz.startedAt).getTime();
           this.timeLeftInPercent = (surat / maxraj) * 100;
         }
       }

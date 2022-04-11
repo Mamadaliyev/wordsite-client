@@ -51,7 +51,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { config } from "@/config";
 import axios from "axios";
 export default {

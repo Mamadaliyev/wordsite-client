@@ -22,7 +22,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import Quiz from "../../components/Quiz.vue";
 import axios from "axios";
 import { config } from "@/config";
