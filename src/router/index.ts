@@ -7,8 +7,8 @@ import ProfileView from "../views/ProfileView.vue";
 import MyWordsView from "../views/words/MyWordsView.vue";
 import Tags from "../views/TagsView.vue";
 import Quiz from "../views/quiz/QuizView.vue";
-import QuizTestView from "../views/quiz/QuizTestView";
-import QuizInfoView from "../views/quiz/QuizInfoView";
+import QuizTestView from "../views/quiz/QuizTestView.vue";
+import QuizInfoView from "../views/quiz/QuizInfoView.vue";
 import store from "../store";
 
 Vue.use(VueRouter);
