@@ -60,6 +60,7 @@ export default {
           { headers: headers }
         );
         const data = response.data.data;
+        this.$store.commit("setQuiz", data);
 
         this.$router.push({
           name: "quiz-retest",

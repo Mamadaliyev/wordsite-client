@@ -8,6 +8,7 @@ export default new Vuex.Store({
   state: {
     token: "",
     userData: {},
+    quiz: "",
   },
   getters: {
     getToken(state) {
@@ -27,6 +28,9 @@ export default new Vuex.Store({
     Logout(state) {
       state.token = "";
       state.userData = {};
+    },
+    setQuiz(state, data) {
+      state.quiz = data;
     },
   },
   actions: {},

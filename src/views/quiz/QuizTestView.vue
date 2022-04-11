@@ -49,7 +49,22 @@ export default {
     // }
     this.getQuizHistory();
   },
+  mounted() {
+    this.interval = setInterval(() => {
+      this.checkLifeTime();
+    }, 1000);
+  },
   methods: {
+    checkLifeTime() {
+      if (this.$store.state.quiz) {
+        if (
+          !this.$store.state.quiz.isFinished &&
+          new Date(this.$store.state.quiz.finishingAt) < new Date()
+        ) {
+          this.handleFinish();
+        }
+      }
+    },
     async handleFinish() {
       try {
         this.isLoading = true;
@@ -62,6 +77,7 @@ export default {
           { headers: headers }
         );
         this.$router.push({ name: "quiz" });
+        this.$store.commit("setQuiz", data.data.data);
         console.log(data);
       } catch (e) {
         console.log(e);
