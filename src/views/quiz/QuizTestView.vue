@@ -24,8 +24,7 @@
 
 <script>
 import Quiz from "../../components/Quiz.vue";
-import axios from "axios";
-import { config } from "@/config";
+import { quizApi } from "@/api";
 export default {
   components: { Quiz },
   data() {
@@ -42,11 +41,6 @@ export default {
     };
   },
   created() {
-    // if (this.$route.params.id || this.id) {
-    //   this.id = this.$route.params.id;
-    // } else {
-    //   this.createQuiz(this.$route.params.size);
-    // }
     this.getQuizHistory();
   },
   mounted() {
@@ -68,17 +62,9 @@ export default {
     async handleFinish() {
       try {
         this.isLoading = true;
-        const headers = {
-          Authorization: `Bearer ${this.$store.state.token}`,
-        };
-        const data = await axios.post(
-          `${config.BASE_URL}/quiz/finish/${this.quizHistory._id}`,
-          {},
-          { headers: headers }
-        );
+        const data = await quizApi.finish(this.quizHistory._id);
         this.$router.push({ name: "quiz" });
-        this.$store.commit("setQuiz", data.data.data);
-        console.log(data);
+        this.$store.commit("setQuiz", data.data);
       } catch (e) {
         console.log(e);
       } finally {
@@ -116,19 +102,14 @@ export default {
       try {
         const id = this.$route.params.id;
         this.isLoading = true;
-        const headers = {
-          Authorization: `Bearer ${this.$store.state.token}`,
-        };
-        const data = await axios.get(`${config.BASE_URL}/quiz/${id}`, {
-          headers: headers,
-        });
-        this.quizes = data.data.data.quizes;
+        const data = await quizApi.get(id);
+        this.quizes = data.data.quizes;
         this.currentQuiz = this.quizes[0];
         this.total = this.quizes.length;
-        this.score = data.data.data.score;
-        delete data.data.data.quizes;
-        this.quizHistory = data.data.data;
-        this.isFinished = data.data.data.isFinished;
+        this.score = data.data.score;
+        delete data.data.quizes;
+        this.quizHistory = data.data;
+        this.isFinished = data.data.isFinished;
       } catch (e) {
         console.log(e);
       } finally {

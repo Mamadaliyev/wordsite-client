@@ -59,8 +59,7 @@
 </template>
 
 <script>
-import { config } from "../../config";
-import axios from "axios";
+import { userApi } from "@/api";
 export default {
   name: "SignupView",
   data() {
@@ -121,11 +120,10 @@ export default {
         if (valid) {
           try {
             const payload = { ...this.formData };
-            await axios.post(`${config.BASE_URL}/user/register`, payload);
+            await userApi.register(payload);
             this.$router.push({ name: "sign-in" });
           } catch (e) {
-            console.log(e.response);
-            this.$message.error(e.response.data.message);
+            console.log(e);
           }
         } else {
           return false;

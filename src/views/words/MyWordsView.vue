@@ -121,6 +121,7 @@
 <script>
 import axios from "axios";
 import { config } from "../../config";
+import { wordApi } from "@/api";
 export default {
   name: "MyWordsView",
   data() {
@@ -239,19 +240,11 @@ export default {
         const payload = {
           ...this.filter,
         };
-        const headers = {
-          Authorization: `Bearer ${this.$store.state.token}`,
-        };
-        const { data } = await axios.post(
-          `${config.BASE_URL}/word/words`,
-          payload,
-          { headers: headers }
-        );
+        const data = await wordApi.getMyWordsPaging(payload);
         this.filter.total = data.data.total;
         this.myWords = data.data.data;
       } catch (e) {
         console.log(e);
-        this.$message.error("Something wrong");
       } finally {
         this.isLoading = false;
       }

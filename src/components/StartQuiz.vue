@@ -16,8 +16,7 @@
 </template>
 
 <script>
-import { config } from "@/config";
-import axios from "axios";
+import { quizApi } from "@/api";
 
 export default {
   name: "QuizDialog",
@@ -51,20 +50,15 @@ export default {
     async startQuiz() {
       try {
         this.isLoading = true;
-        const headers = {
-          Authorization: `Bearer ${this.$store.state.token}`,
+        const query = {
+          size: this.settings.size,
         };
-        const response = await axios.post(
-          `${config.BASE_URL}/quiz/create/${this.settings.size}`,
-          {},
-          { headers: headers }
-        );
-        const data = response.data.data;
-        this.$store.commit("setQuiz", data);
+        const data = await quizApi.create(query);
+        this.$store.commit("setQuiz", data.data);
 
         this.$router.push({
           name: "quiz-test",
-          params: { id: data._id },
+          params: { id: data.data._id },
         });
       } catch (e) {
         console.log(e);

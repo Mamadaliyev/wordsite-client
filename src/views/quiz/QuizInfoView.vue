@@ -18,9 +18,8 @@
 </template>
 
 <script>
-import axios from "axios";
-import { config } from "@/config";
 import Quiz from "../../components/Quiz.vue";
+import { quizApi } from "@/api";
 
 export default {
   components: { Quiz },
@@ -41,18 +40,12 @@ export default {
     async getQuizHistory() {
       try {
         this.isLoading = true;
-        const headers = {
-          Authorization: `Bearer ${this.$store.state.token}`,
-        };
-        const data = await axios.get(
-          `${config.BASE_URL}/quiz/${this.$route.params.id}`,
-          { headers: headers }
-        );
-        console.log(data.data.data);
-        this.quizes = data.data.data.items;
+        const data = await quizApi.get(this.$route.params.id);
+        console.log(data.data);
+        this.quizes = data.data.items;
         this.currentQuiz = this.quizes[0];
         this.total = this.quizes.length;
-        this.score = data.data.data.score;
+        this.score = data.data.score;
       } catch (e) {
         console.log(e);
       } finally {

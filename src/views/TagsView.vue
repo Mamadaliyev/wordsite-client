@@ -39,8 +39,7 @@
 </template>
 
 <script>
-import axios from "axios";
-import { config } from "../config";
+import { tagApi } from "@/api";
 
 export default {
   name: "TagsView",
@@ -69,19 +68,11 @@ export default {
         const payload = {
           ...this.filter,
         };
-        const headers = {
-          Authorization: `Bearer ${this.$store.state.token}`,
-        };
-        const { data } = await axios.post(
-          `${config.BASE_URL}/tag/tags`,
-          payload,
-          { headers: headers }
-        );
+        const data = await tagApi.getPaging(payload);
         this.filter.total = data.data.total;
         this.tags = data.data.data;
       } catch (e) {
         console.log(e);
-        this.$message.error("Something wrong");
       } finally {
         this.isLoading = false;
       }

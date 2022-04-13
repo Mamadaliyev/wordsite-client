@@ -70,9 +70,8 @@
 
 <script>
 import moment from "moment";
-import axios from "axios";
-import { config } from "../../config";
 import QuizInfoDialog from "../../components/StartQuiz.vue";
+import { quizApi } from "@/api";
 export default {
   name: "QuizView",
   components: { QuizInfoDialog },
@@ -118,16 +117,9 @@ export default {
       this.infoVisible = true;
     },
     async getQuizHistory() {
-      const headers = {
-        Authorization: `Bearer ${this.$store.state.token}`,
-      };
-      const quizes = await axios.post(
-        `${config.BASE_URL}/quiz`,
-        { page: this.filter.page, limit: this.filter.limit },
-        { headers: headers }
-      );
-      this.tableData = quizes.data.data.data;
-      this.filter.total = quizes.data.data.total;
+      const quizes = await quizApi.getPaging(this.filter);
+      this.tableData = quizes.data.data;
+      this.filter.total = quizes.data.total;
       console.log(quizes);
     },
     handlePagingChange(page) {

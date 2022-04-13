@@ -52,8 +52,7 @@
 </template>
 
 <script>
-import { config } from "@/config";
-import axios from "axios";
+import { quizApi } from "@/api";
 
 export default {
   name: "QuizComp",
@@ -77,13 +76,8 @@ export default {
     async handleAnswer(variant) {
       if (this.quiz.isAnswered || this.isFinished) return;
       try {
-        const url = `${config.BASE_URL}/quiz-item/quiz/answer/${this.quiz._id}/${variant.wordId}`;
-        const headers = {
-          Authorization: `Bearer ${this.$store.state.token}`,
-        };
-        const data = await axios.post(url, {}, { headers: headers });
-        console.log(data.data);
-        this.quiz = data.data.data;
+        const data = await quizApi.answer(this.quiz._id, variant.wordId);
+        this.quiz = data.data;
       } catch (e) {
         console.log(e);
       }

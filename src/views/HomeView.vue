@@ -46,8 +46,7 @@
 </template>
 
 <script>
-import axios from "axios";
-import { config } from "../config";
+import { wordApi } from "@/api";
 
 export default {
   name: "HomeView",
@@ -75,22 +74,11 @@ export default {
     async getWords() {
       try {
         this.isLoading = true;
-        const payload = {
-          ...this.filter,
-        };
-        const headers = {
-          Authorization: `Bearer ${this.$store.state.token}`,
-        };
-        const { data } = await axios.post(
-          `${config.BASE_URL}/word/public`,
-          payload,
-          { headers: headers }
-        );
+        const data = await wordApi.getPublicWordsPaging(this.filter);
         this.filter.total = data.data.total;
         this.words = data.data.data;
       } catch (e) {
         console.log(e);
-        this.$message.error("Something wrong");
       } finally {
         this.isLoading = false;
       }
