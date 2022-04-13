@@ -63,7 +63,7 @@ export default {
         this.$store.commit("setQuiz", data);
 
         this.$router.push({
-          name: "quiz-retest",
+          name: "quiz-test",
           params: { id: data._id },
         });
       } catch (e) {

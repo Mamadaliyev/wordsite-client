@@ -45,7 +45,7 @@ export default {
           Authorization: `Bearer ${this.$store.state.token}`,
         };
         const data = await axios.get(
-          `${config.BASE_URL}/quiz/history/${this.$route.params.id}`,
+          `${config.BASE_URL}/quiz/${this.$route.params.id}`,
           { headers: headers }
         );
         console.log(data.data.data);

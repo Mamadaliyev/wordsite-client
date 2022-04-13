@@ -9,6 +9,7 @@ import Tags from "../views/TagsView.vue";
 import Quiz from "../views/quiz/QuizView.vue";
 import QuizTestView from "../views/quiz/QuizTestView";
 import QuizInfoView from "../views/quiz/QuizInfoView";
+import NotFoundView from "../views/NotFoundView";
 import store from "../store";
 
 Vue.use(VueRouter);
@@ -63,16 +64,8 @@ const routes = [
     },
   },
   {
-    path: "/quiz/test",
-    name: "quiz-test",
-    component: QuizTestView,
-    meta: {
-      requiresAuth: true,
-    },
-  },
-  {
     path: "/quiz/test/:id",
-    name: "quiz-retest",
+    name: "quiz-test",
     component: QuizTestView,
     meta: {
       requiresAuth: true,
@@ -105,6 +98,14 @@ const routes = [
     // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
+  },
+  {
+    path: "*",
+    name: "not-found",
+    component: NotFoundView,
+    meta: {
+      requiresAuth: false,
+    },
   },
 ];
 

@@ -119,7 +119,7 @@ export default {
         const headers = {
           Authorization: `Bearer ${this.$store.state.token}`,
         };
-        const data = await axios.get(`${config.BASE_URL}/quiz/history/${id}`, {
+        const data = await axios.get(`${config.BASE_URL}/quiz/${id}`, {
           headers: headers,
         });
         this.quizes = data.data.data.quizes;

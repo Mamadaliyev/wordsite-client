@@ -45,32 +45,12 @@
 </template>
 
 <script>
-import { config } from "../../config";
-import axios from "axios";
 import store from "../../store";
+import { userApi } from "../../api";
 
 export default {
   name: "SigninView",
   data() {
-    // var validatePass = (rule, value, callback) => {
-    //   if (value === "") {
-    //     callback(new Error("Please input the password"));
-    //   } else {
-    //     if (this.formData.checkPass !== "") {
-    //       this.$refs.formData.validateField("checkPass");
-    //     }
-    //     callback();
-    //   }
-    // };
-    // var validatePass2 = (rule, value, callback) => {
-    //   if (value === "") {
-    //     callback(new Error("Please input the password again"));
-    //   } else if (value !== this.formData.pass) {
-    //     callback(new Error("Two inputs don't match!"));
-    //   } else {
-    //     callback();
-    //   }
-    // };
     return {
       formData: {
         password: "",
@@ -103,17 +83,12 @@ export default {
         if (valid) {
           try {
             const payload = { ...this.formData };
-            const { data } = await axios.post(
-              `${config.BASE_URL}/user/login`,
-              payload
-            );
-            console.log(data);
+            const data = await userApi.login(payload);
             store.commit("setToken", data.data.token);
             store.commit("setUserData", data.data.user);
             this.$router.push({ name: "home" });
           } catch (e) {
-            console.log(e.response.data);
-            this.$message.error(e.response.data.message);
+            console.log(e);
           }
         } else {
           console.log("error submit!!");

@@ -54,6 +54,7 @@
 <script>
 import { config } from "@/config";
 import axios from "axios";
+
 export default {
   name: "QuizComp",
   props: ["question", "index", "total", "isFinished"],

@@ -100,7 +100,7 @@ export default {
     },
     handleQuizInfo(selected) {
       console.log(selected);
-      this.$router.push({ name: "quiz-retest", params: { id: selected._id } });
+      this.$router.push({ name: "quiz-test", params: { id: selected._id } });
     },
     getDiffMinutes(row) {
       if (!row.isFinished) return "-";
