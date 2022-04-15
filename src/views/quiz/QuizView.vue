@@ -11,9 +11,11 @@
           :data="tableData"
           style="width: 100%"
           empty-text="No data"
+          v-loading="isLoading"
           @row-click="handleQuizInfo"
         >
-          <el-table-column type="index" width="50"> </el-table-column>
+          <el-table-column type="index" width="50" :index="getIndex">
+          </el-table-column>
           <el-table-column label="Started date" width="180">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{
@@ -96,6 +98,9 @@ export default {
     this.getQuizHistory();
   },
   methods: {
+    getIndex(index) {
+      return (this.filter.page - 1) * this.filter.limit + index + 1;
+    },
     moment: function (args) {
       return moment(args);
     },
@@ -119,10 +124,17 @@ export default {
       this.infoVisible = true;
     },
     async getQuizHistory() {
-      const quizes = await quizApi.getPaging(this.filter);
-      this.tableData = quizes.data.data;
-      this.filter.total = quizes.data.total;
-      console.log(quizes);
+      try {
+        this.isLoading = true;
+        const quizes = await quizApi.getPaging(this.filter);
+        this.tableData = quizes.data.data;
+        this.filter.total = quizes.data.total;
+        console.log(quizes);
+      } catch (e) {
+        console.log(e);
+      } finally {
+        this.isLoading = false;
+      }
     },
     handlePagingChange(page) {
       this.filter.page = page;
