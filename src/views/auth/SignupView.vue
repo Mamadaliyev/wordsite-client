@@ -139,7 +139,7 @@ export default {
 
 <style scoped lang="scss">
 .sign-in {
-  margin-top: 100px;
+  margin-top: 80px;
   display: flex;
   justify-content: center;
   align-items: center;

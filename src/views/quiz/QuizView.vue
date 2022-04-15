@@ -1,10 +1,12 @@
 <template>
   <div class="quiz">
-    <el-row>
-      <el-col :offset="3" :span="18">
-        <el-button class="new-quiz" type="primary" @click="handleNewQuiz">
-          New quiz
-        </el-button>
+    <el-row class="header" type="flex">
+      <el-col>
+        <el-button type="primary" @click="handleNewQuiz"> New quiz </el-button>
+      </el-col>
+    </el-row>
+    <el-row class="body">
+      <el-col>
         <el-table
           :data="tableData"
           style="width: 100%"
@@ -131,8 +133,8 @@ export default {
 </script>
 <style scoped lang="scss">
 .quiz {
-  .new-quiz {
-    margin: 10px;
+  .header {
+    margin-bottom: 10px;
   }
   .pagination {
     margin-top: 20px;

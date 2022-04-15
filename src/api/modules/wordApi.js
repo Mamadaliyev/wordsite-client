@@ -10,6 +10,9 @@ export class WordApi extends Api {
   update(id, data) {
     return this.execute("put", `/word/${id}`, data);
   }
+  delete(id) {
+    return this.execute("delete", `/word/${id}`);
+  }
   getMyWordsPaging(query) {
     return this.execute("get", "/word/my-words", {}, query);
   }

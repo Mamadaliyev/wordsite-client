@@ -1,7 +1,7 @@
 <template>
   <div class="home">
-    <el-row class="header">
-      <el-col :offset="18" :span="4">
+    <el-row type="flex" justify="end">
+      <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
         <el-input
           suffix-icon="el-icon-search"
           placeholder="Search"
@@ -10,25 +10,31 @@
         ></el-input>
       </el-col>
     </el-row>
-    <el-row class="top-row">
-      <el-col :span="20">
-        <el-row :gutter="10" class="inner-row">
-          <el-col v-for="(word, index) in words" :key="index" :span="4">
-            <el-card class="box-card">
-              <div slot="header" class="clearfix">
-                <span>
-                  <b> {{ word.name }} </b></span
-                >
-              </div>
-              <span> {{ word.defination }} </span>
-              <div class="tags">
-                <span v-for="tag in word.tags" :key="tag._id" class="text item">
-                  <a href="" @click="handleTag(tag)"> {{ `#${tag}` }} </a>
-                </span>
-              </div>
-            </el-card>
-          </el-col>
-        </el-row>
+    <el-row :gutter="10" class="inner-row">
+      <el-col
+        v-for="(word, index) in words"
+        :key="index"
+        :xs="24"
+        :sm="12"
+        :md="8"
+        :lg="6"
+        :xl="4"
+      >
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>
+              <b> {{ word.name }} </b></span
+            >
+          </div>
+          <div class="box-card-body">
+            <span class="defination"> {{ word.defination }} </span>
+            <div class="tags">
+              <span v-for="tag in word.tags" :key="tag._id" class="text item">
+                <a href="" @click="handleTag(tag)"> {{ `#${tag}` }} </a>
+              </span>
+            </div>
+          </div>
+        </el-card>
       </el-col>
     </el-row>
     <div class="pagination">
@@ -93,27 +99,38 @@ export default {
 
 <style scoped lang="scss">
 .home {
-  margin-top: 20px;
   .add-row {
     margin-bottom: 20px;
   }
-  .top-row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .inner-row {
-      display: flex;
-      .box-card {
-        height: 100%;
-      }
-      .el-col {
-        margin-top: 10px;
-      }
-      .tags {
-        margin-top: 20px;
-        a {
-          text-decoration: none;
+  .inner-row {
+    .box-card {
+      height: 200px;
+      .box-card-body {
+        overflow: hidden;
+        height: 95px;
+        .defination {
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
+        .tags {
+          display: -webkit-box;
+          -webkit-line-clamp: 1;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+    }
+    .el-col {
+      margin-top: 10px;
+    }
+    .tags {
+      margin-top: 20px;
+      a {
+        text-decoration: none;
       }
     }
   }

@@ -144,6 +144,7 @@ export default {
 
 <style scoped lang="scss">
 .nav-root {
+  margin-bottom: 25px;
   .nav-menu {
     background-color: #333;
     font-size: 18px;

@@ -122,7 +122,6 @@ export default {
 
 <style scoped lang="scss">
 .quiz-test {
-  margin-top: 20px;
   .header {
     display: flex;
     justify-content: flex-end;

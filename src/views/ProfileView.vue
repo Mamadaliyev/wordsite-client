@@ -46,7 +46,7 @@ export default {
 
 <style scoped lang="scss">
 .profile {
-  margin-top: 100px;
+  margin-top: 80px;
   display: flex;
   justify-content: center;
   align-items: center;

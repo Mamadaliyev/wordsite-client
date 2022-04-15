@@ -1,12 +1,12 @@
 <template>
   <div class="my-words">
-    <el-row class="add-row">
-      <el-col :offset="2" :span="16">
+    <el-row class="header" type="flex" justify="space-between">
+      <el-col :xl="3" :lg="4" :md="6" :sm="8" :xs="12">
         <el-button @click="handleAdd" type="primary"
           ><i class="el-icon-plus"></i> Add word
         </el-button>
       </el-col>
-      <el-col :span="4">
+      <el-col :xl="3" :lg="4" :md="6" :sm="8" :xs="12">
         <el-input
           suffix-icon="el-icon-search"
           placeholder="Search"
@@ -15,34 +15,41 @@
         ></el-input>
       </el-col>
     </el-row>
-    <el-row class="top-row">
-      <el-col :span="20">
-        <el-row v-if="!isLoading" :gutter="10" class="inner-row">
-          <el-col v-for="(word, index) in myWords" :key="index" :span="4">
-            <el-card class="box-card">
-              <div slot="header" class="clearfix">
-                <span>
-                  <b> {{ word.name }} </b></span
-                >
-                <el-button
-                  @click="handleEdit(word)"
-                  style="float: right; padding: 3px 0"
-                  type="text"
-                  ><i class="el-icon-edit"></i>
-                </el-button>
-              </div>
-              <span> {{ word.defination }} </span>
-              <div class="tags">
-                <span v-for="tag in word.tags" :key="tag._id" class="text item">
-                  <a href="" @click="handleTag(tag)"> {{ `#${tag}` }} </a>
-                </span>
-              </div>
-            </el-card>
-          </el-col>
-        </el-row>
-        <div class="loading" v-else v-loading="isLoading"></div>
+    <el-row v-if="!isLoading" :gutter="10" class="inner-row">
+      <el-col
+        v-for="(word, index) in myWords"
+        :key="index"
+        :xs="24"
+        :sm="12"
+        :md="8"
+        :lg="6"
+        :xl="4"
+      >
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>
+              <b> {{ word.name }} </b></span
+            >
+            <el-button
+              @click="handleEdit(word)"
+              style="float: right; padding: 3px 0"
+              type="text"
+              ><i class="el-icon-edit"></i>
+            </el-button>
+          </div>
+          <div class="box-card-body">
+            <span class="defination"> {{ word.defination }} </span>
+            <div class="tags">
+              <span v-for="tag in word.tags" :key="tag._id" class="text item">
+                <a href="" @click="handleTag(tag)"> {{ `#${tag}` }} </a>
+              </span>
+            </div>
+          </div>
+        </el-card>
       </el-col>
     </el-row>
+    <div class="loading" v-else v-loading="isLoading"></div>
+
     <div>
       <el-dialog
         :title="isEdit ? 'Edit word' : 'Add word'"
@@ -68,14 +75,16 @@
               multiple
               filterable
               allow-create
+              remote
+              :remote-method="getTagForChoose"
               default-first-option
               placeholder="Choose tags for your words"
             >
               <el-option
-                v-for="(tag, index) in form.tags"
+                v-for="(tag, index) in tags"
                 :key="index"
-                :label="tag"
-                :value="tag"
+                :label="tag.name"
+                :value="tag.name"
               >
               </el-option>
             </el-select>
@@ -87,7 +96,11 @@
         <span slot="footer" class="dialog-footer">
           <div style="display: flex; justify-content: space-between">
             <div>
-              <el-button type="danger" @click="handleDelete">
+              <el-button
+                v-if="form._id ? true : false"
+                type="danger"
+                @click="handleDelete"
+              >
                 <i class="el-icon-delete"></i>
               </el-button>
             </div>
@@ -119,13 +132,12 @@
 </template>
 
 <script>
-import axios from "axios";
-import { config } from "../../config";
-import { wordApi } from "@/api";
+import { tagApi, wordApi } from "@/api";
 export default {
   name: "MyWordsView",
   data() {
     return {
+      tags: [],
       isEdit: true,
       dialogFormVisible: false,
       isLoading: false,
@@ -149,6 +161,7 @@ export default {
   },
   created() {
     this.getMyWords();
+    this.getTagForChoose();
   },
   methods: {
     handleTag(tag) {
@@ -167,15 +180,10 @@ export default {
     async handleDelete() {
       try {
         this.isLoading = true;
-        const headers = {
-          Authorization: `Bearer ${this.$store.state.token}`,
-        };
-        await axios.delete(`${config.BASE_URL}/word/delete/${this.form._id}`, {
-          headers: headers,
-        });
+        await wordApi.delete(this.form._id);
         this.getMyWords();
       } catch (e) {
-        this.$message.error("Something wrong");
+        console.log(e);
       } finally {
         this.isLoading = false;
         this.dialogFormVisible = false;
@@ -187,18 +195,9 @@ export default {
         const payload = {
           ...this.form,
         };
-        const headers = {
-          Authorization: `Bearer ${this.$store.state.token}`,
-        };
-        const { data } = await axios.post(
-          `${config.BASE_URL}/word/create`,
-          payload,
-          { headers: headers }
-        );
-        console.log(data);
+        await wordApi.create(payload);
       } catch (e) {
         console.log(e);
-        this.$message.error("Something wrong");
       } finally {
         this.dialogFormVisible = false;
         this.isLoading = false;
@@ -217,21 +216,29 @@ export default {
         const payload = {
           ...this.form,
         };
-        const headers = {
-          Authorization: `Bearer ${this.$store.state.token}`,
-        };
-        await axios.put(
-          `${config.BASE_URL}/word/update/${this.form._id}`,
-          payload,
-          { headers: headers }
-        );
+        await wordApi.update(this.form._id, payload);
       } catch (e) {
         console.log(e);
-        this.$message.error("Something wrong");
       } finally {
         this.dialogFormVisible = false;
         this.isLoading = false;
         this.getMyWords();
+      }
+    },
+    async getTagForChoose(query) {
+      try {
+        this.isTagLoading = true;
+        const payload = {
+          search: query,
+          page: 1,
+          limit: 10,
+        };
+        const data = await tagApi.getForChoose(payload);
+        this.tags = data.data.data;
+      } catch (e) {
+        console.log(e);
+      } finally {
+        this.isTagLoading = false;
       }
     },
     async getMyWords() {
@@ -259,30 +266,42 @@ export default {
 
 <style scoped lang="scss">
 .my-words {
-  margin-top: 20px;
-  .add-row {
-    margin-bottom: 20px;
+  .header {
+    margin-bottom: 10px;
   }
-  .top-row {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    .inner-row {
-      display: flex;
-      .el-col {
-        margin-top: 10px;
+  .inner-row {
+    .el-col {
+      margin-top: 10px;
+    }
+    .tags {
+      margin-top: 20px;
+      a {
+        text-decoration: none;
       }
-      .tags {
-        margin-top: 20px;
-        a {
-          text-decoration: none;
+    }
+    .box-card {
+      height: 200px;
+      .box-card-body {
+        overflow: hidden;
+        height: 95px;
+        .defination {
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
-      }
-      .box-card {
-        height: 100%;
+        .tags {
+          display: -webkit-box;
+          -webkit-line-clamp: 1;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
       }
     }
   }
+
   .loading {
     display: flex;
     justify-content: center;
