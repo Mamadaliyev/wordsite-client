@@ -1,9 +1,9 @@
 <template>
   <div class="nav-root">
     <el-row class="nav-menu">
-      <el-col :span="4">
+      <el-col :span="4" class="logo-wrapper">
         <div class="logo">
-          <span>Wordsite</span>
+          <img width="130px" src="../assets/logo.png" alt="logo" />
         </div>
       </el-col>
       <el-col :span="20">
@@ -42,7 +42,6 @@
           </div>
         </ul>
       </el-col>
-      <el-col :span="4"> </el-col>
     </el-row>
     <el-row
       v-if="
@@ -63,7 +62,11 @@
 </template>
 
 <script>
+import Logo from "../components/logo/Logo.vue";
 export default {
+  components: {
+    Logo,
+  },
   data() {
     return {
       timeLeftInPercent: 100,
@@ -148,13 +151,10 @@ export default {
   .nav-menu {
     background-color: #333;
     font-size: 18px;
-    .logo {
-      margin-top: 25px;
+    .logo-wrapper {
       display: flex;
       justify-content: center;
       align-items: center;
-      color: white;
-      height: 100%;
     }
   }
   ul.topnav {
@@ -182,12 +182,12 @@ export default {
   }
 
   ul.topnav li span:hover:not(.active) {
-    background-color: #111;
+    color: #04aa6d;
     cursor: pointer;
   }
 
   ul.topnav li span.active {
-    background-color: #04aa6d;
+    color: #04aa6d;
     cursor: pointer;
   }
 
@@ -210,5 +210,10 @@ export default {
 <style lang="scss">
 .el-progress-bar {
   margin-top: -13px;
+}
+.nav-menu {
+  .el-col {
+    height: 70px;
+  }
 }
 </style>

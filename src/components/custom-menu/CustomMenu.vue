@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import Logo from "../logo/WLogo.vue";
+import Logo from "../logo/Logo.vue";
 export default {
   name: "CustomMenu",
   components: {
