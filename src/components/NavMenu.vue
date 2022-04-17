@@ -3,7 +3,12 @@
     <el-row class="nav-menu">
       <el-col :span="4" class="logo-wrapper">
         <div class="logo">
-          <img width="130px" src="../assets/logo.png" alt="logo" />
+          <img
+            @click="handleHome"
+            width="130px"
+            src="../assets/logo.png"
+            alt="logo"
+          />
         </div>
       </el-col>
       <el-col :span="20">
@@ -106,6 +111,9 @@ export default {
     },
   },
   methods: {
+    handleHome() {
+      this.$router.push("/");
+    },
     progressColor() {
       if (this.timeLeftInPercent >= 70) {
         return "green";
@@ -152,6 +160,9 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
+      img {
+        cursor: pointer;
+      }
     }
   }
   ul.topnav {
