@@ -10,7 +10,7 @@
         ></el-input>
       </el-col>
     </el-row>
-    <el-row :gutter="10" class="inner-row">
+    <el-row v-loading="isLoading" :gutter="10" class="inner-row">
       <el-col
         v-for="(tag, index) in tags"
         :key="index"
@@ -52,6 +52,7 @@ export default {
     return {
       search: "",
       tags: [],
+      isLoading: false,
       filter: {
         search: "",
         page: 1,
