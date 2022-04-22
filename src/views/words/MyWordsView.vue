@@ -44,6 +44,10 @@
                 <a href="" @click="handleTag(tag)"> {{ `#${tag}` }} </a>
               </span>
             </div>
+            <!-- <div class="created-at">
+                <i class="el-icon-time"></i>
+                {{ new Date(word.createdAt).toLocaleDateString() }}
+              </div> -->
           </div>
         </el-card>
       </el-col>
@@ -154,7 +158,7 @@ export default {
       filter: {
         search: "",
         page: 1,
-        limit: 20,
+        limit: 12,
         total: 20,
       },
     };

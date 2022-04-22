@@ -10,7 +10,7 @@
             class="el-col-item"
             v-for="(variant, index) in quiz.variants"
             :key="index"
-            :span="10"
+            :span="12"
           >
             <div
               v-bind:class="{
@@ -112,17 +112,16 @@ export default {
       }
     }
     .variants {
-      .el-col-item {
-        height: 50px;
-      }
       .variant {
+        margin: 5px;
         border: 1px solid black;
-        height: 100%;
+        height: 50px;
+        max-height: 100px;
         .item {
-          display: -webkit-box;
+          display: flex;
           justify-content: flex-start;
+          cursor: pointer;
           height: 100%;
-          align-items: center;
           .key {
             background-color: blue;
             display: flex;
@@ -130,10 +129,11 @@ export default {
             align-items: center;
             height: 100%;
             color: white;
-            width: 40px !important;
+            width: 20%;
           }
           .value {
             padding: 10px;
+            width: 80%;
           }
         }
       }

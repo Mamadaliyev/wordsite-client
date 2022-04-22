@@ -9,7 +9,7 @@ export class Api {
   userData;
   baseUrl;
   instance;
-  timeout = 6000;
+  timeout = 50000;
   constructor() {
     this.token = store.state.token;
     this.userData = store.state.userData;

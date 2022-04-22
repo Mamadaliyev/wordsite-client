@@ -64,7 +64,7 @@ export default {
       filter: {
         search: "",
         page: 1,
-        limit: 20,
+        limit: 12,
         total: 20,
       },
       words: [],

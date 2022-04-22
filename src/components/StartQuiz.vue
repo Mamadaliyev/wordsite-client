@@ -3,6 +3,7 @@
     <el-dialog title="Start quiz" :visible.sync="showDialog">
       <div>
         <el-form
+          v-loading="isLoading"
           :model="settings"
           @submit.native.prevent="startQuiz"
           label-width="150px"
@@ -60,7 +61,9 @@
         </el-form>
       </div>
       <div style="text-align: right; margin-top: 10px">
-        <el-button type="primary" @click="startQuiz"> Start </el-button>
+        <el-button :disabled="isLoading" type="primary" @click="startQuiz">
+          Start
+        </el-button>
       </div>
     </el-dialog>
   </div>
@@ -82,6 +85,7 @@ export default {
     return {
       quiz: {},
       tags: [],
+      isLoading: false,
       visiblities: [
         {
           name: "Both",
