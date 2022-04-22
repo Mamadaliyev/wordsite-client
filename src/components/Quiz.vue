@@ -103,9 +103,13 @@ export default {
     justify-content: center;
     align-items: center;
     .sliders {
+      margin-top: 30px;
       display: flex;
       justify-content: center;
       align-items: center;
+      span {
+        margin: 2px;
+      }
     }
     .variants {
       .el-col-item {
