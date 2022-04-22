@@ -1,15 +1,16 @@
 <template>
   <div class="quiz-comp">
     <el-row class="quiz-row">
-      <el-col :span="12">
+      <el-col :span="15">
         <h3>
           <b> {{ index + 1 }} </b> . {{ quiz.name }}
         </h3>
-        <el-row class="variants" :gutter="20">
+        <el-row class="variants">
           <el-col
+            class="el-col-item"
             v-for="(variant, index) in quiz.variants"
             :key="index"
-            :span="12"
+            :span="10"
           >
             <div
               v-bind:class="{
@@ -23,9 +24,9 @@
               class="variant"
               @click="handleAnswer(variant)"
             >
-              <div>
-                <span class="letter"> {{ letters[index] }} </span>
-                <span> {{ variant.name }} </span>
+              <div class="item">
+                <div class="key">{{ letters[index] }}</div>
+                <div class="value">{{ variant.name }}</div>
               </div>
             </div>
           </el-col>
@@ -107,22 +108,30 @@ export default {
       align-items: center;
     }
     .variants {
-      .variant {
-        width: 100%;
-        border: 1px solid black;
-        height: 49px;
-        display: grid;
-        align-items: center;
-        margin: 15px;
-        .letter {
-          margin-right: 10px;
-          padding: 15px;
-          background-color: blueviolet;
-          color: white;
-        }
+      .el-col-item {
+        height: 50px;
       }
-      .variant:hover {
-        cursor: pointer;
+      .variant {
+        border: 1px solid black;
+        height: 100%;
+        .item {
+          display: -webkit-box;
+          justify-content: flex-start;
+          height: 100%;
+          align-items: center;
+          .key {
+            background-color: blue;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            color: white;
+            width: 40px !important;
+          }
+          .value {
+            padding: 10px;
+          }
+        }
       }
       .success {
         background-color: green;

@@ -1,13 +1,17 @@
 <template>
   <div class="quiz-test">
     <el-row class="header">
-      <el-col :span="4"> {{ quizIndex + 1 }} / {{ total }} </el-col>
       <el-col :span="4">
         <el-button v-if="!isFinished" type="danger" @click="handleFinish">
           Finish
         </el-button>
       </el-col>
     </el-row>
+    <question-order
+      :quizes="quizes"
+      :currentId="currentQuiz._id"
+      v-on:navigate="handleNavigate"
+    />
     <quiz
       v-if="!isLoading"
       :question="currentQuiz"
@@ -24,9 +28,11 @@
 
 <script>
 import Quiz from "../../components/Quiz.vue";
+import QuestionOrder from "../../components/QuestionOrder.vue";
 import { quizApi } from "@/api";
+
 export default {
-  components: { Quiz },
+  components: { Quiz, QuestionOrder },
   data() {
     return {
       currentQuiz: {},
@@ -98,6 +104,11 @@ export default {
       this.currentQuiz = this.quizes[this.quizIndex];
       console.log(this.currentQuiz);
     },
+    handleNavigate(index) {
+      this.quizIndex = index;
+      this.currentQuiz = this.quizes[index];
+      console.log(this.currentQuiz);
+    },
     async getQuizHistory() {
       try {
         const id = this.$route.params.id;
@@ -122,6 +133,7 @@ export default {
 
 <style scoped lang="scss">
 .quiz-test {
+  margin-top: 20px;
   .header {
     display: flex;
     justify-content: flex-end;

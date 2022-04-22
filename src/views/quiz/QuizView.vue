@@ -14,8 +14,7 @@
           v-loading="isLoading"
           @row-click="handleQuizInfo"
         >
-          <el-table-column type="index" width="50" :index="getIndex">
-          </el-table-column>
+          <el-table-column type="index" width="50"> </el-table-column>
           <el-table-column label="Started date" width="180">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{
@@ -56,7 +55,7 @@
       v-on:close="handleCloseDialog"
       :info="selectedHistory"
     />
-    <el-row class="pagination">
+    <!-- <el-row class="pagination">
       <el-col :span="24" class="paging-col">
         <el-pagination
           :page-size="filter.limit"
@@ -68,7 +67,7 @@
         >
         </el-pagination>
       </el-col>
-    </el-row>
+    </el-row> -->
   </div>
 </template>
 
@@ -87,15 +86,18 @@ export default {
       isLoading: false,
       infoVisible: false,
       filter: {
-        limit: 10,
+        limit: 20,
         page: 1,
         total: 0,
       },
     };
   },
   computed: {},
-  created() {
+  beforeMount() {
     this.getQuizHistory();
+  },
+  mounted() {
+    this.getNextQuizes();
   },
   methods: {
     getIndex(index) {
@@ -127,14 +129,25 @@ export default {
       try {
         this.isLoading = true;
         const quizes = await quizApi.getPaging(this.filter);
-        this.tableData = quizes.data.data;
+        this.tableData.push(...quizes.data.data);
+
         this.filter.total = quizes.data.total;
-        console.log(quizes);
       } catch (e) {
         console.log(e);
       } finally {
         this.isLoading = false;
       }
+    },
+    getNextQuizes() {
+      window.onscroll = () => {
+        let bottomOfWindow =
+          document.documentElement.scrollTop + window.innerHeight ===
+          document.documentElement.offsetHeight;
+        if (bottomOfWindow) {
+          this.filter.page += 1;
+          this.getQuizHistory();
+        }
+      };
     },
     handlePagingChange(page) {
       this.filter.page = page;
