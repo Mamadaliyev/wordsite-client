@@ -28,10 +28,13 @@
               v-model="formData.password"
               autocomplete="on"
             ></el-input>
+            <el-button class="forgot-text" type="text"
+              >Forgot passowrd?</el-button
+            >
           </el-form-item>
           <el-form-item>
             <el-button
-              style="width: 100%; margin-top: 20px"
+              style="width: 100%"
               type="primary"
               native-type="submit"
               @click="submitForm('formData')"
@@ -39,6 +42,12 @@
             >
           </el-form-item>
         </el-form>
+        <p class="join-text">
+          New to Takrorla?
+          <el-button @click="$router.push({ name: 'sign-up' })" type="text"
+            >Join now</el-button
+          >
+        </p>
       </el-col>
     </el-row>
   </div>
@@ -106,5 +115,11 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  .forgot-text {
+    margin-top: 10px;
+  }
+  .join-text {
+    text-align: center;
+  }
 }
 </style>

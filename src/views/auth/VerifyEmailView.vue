@@ -70,7 +70,7 @@ export default {
   flex-direction: column;
   .img {
     img {
-      height: 50px;
+      height: 60px;
     }
   }
   .text {

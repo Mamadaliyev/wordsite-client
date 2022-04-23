@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row class="sign-in">
+    <el-row class="sign-up">
       <el-col :span="6">
         <div style="text-align: center">
           <h2>Sign up</h2>
@@ -53,6 +53,12 @@
             >
           </el-form-item>
         </el-form>
+        <p class="footer">
+          If you already have an account?
+          <el-button type="text" @click="$router.push({ name: 'sign-in' })"
+            >Sign in</el-button
+          >
+        </p>
       </el-col>
     </el-row>
   </div>
@@ -121,7 +127,7 @@ export default {
           try {
             const payload = { ...this.formData };
             await userApi.register(payload);
-            this.$router.push({ name: "sign-in" });
+            this.$router.push({ name: "email-sent" });
           } catch (e) {
             console.log(e);
           }
@@ -138,10 +144,13 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.sign-in {
+.sign-up {
   margin-top: 80px;
   display: flex;
   justify-content: center;
   align-items: center;
+  .footer {
+    text-align: center;
+  }
 }
 </style>

@@ -3,7 +3,8 @@ import VueRouter from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import SigninView from "../views/auth/SigninView.vue";
 import SignupView from "../views/auth/SignupView.vue";
-import VerifyView from "../views/auth/VerifyView.vue";
+import VerifyView from "../views/auth/VerifyEmailView.vue";
+import EmailSentView from "../views/auth/EmailSentView.vue";
 import ProfileView from "../views/ProfileView.vue";
 import MyWordsView from "../views/words/MyWordsView.vue";
 import Tags from "../views/TagsView.vue";
@@ -36,6 +37,14 @@ const routes = [
     path: "/sign-up",
     name: "sign-up",
     component: SignupView,
+    meta: {
+      requiresAuth: false,
+    },
+  },
+  {
+    path: "/email-sent",
+    name: "email-sent",
+    component: EmailSentView,
     meta: {
       requiresAuth: false,
     },
