@@ -27,11 +27,11 @@ import { userApi } from "@/api";
 export default {
   data() {
     return {
-      hasResponse: true,
+      hasResponse: false,
       isVerified: false,
       isExpired: false,
       isInvalid: false,
-      isLoading: false,
+      isLoading: true,
     };
   },
   created() {
