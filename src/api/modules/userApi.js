@@ -4,6 +4,9 @@ export class UserApi extends Api {
   login(data) {
     return this.execute("post", "/user/login", data);
   }
+  verifyEmail(data) {
+    return this.execute("post", "/user/verify", data);
+  }
   logout() {
     return this.execute("post", "/user/logout");
   }

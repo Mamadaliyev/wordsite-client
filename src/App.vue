@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <!-- <custom-menu /> -->
-    <navmenu />
+    <navmenu v-if="$route.name != 'verify'" />
     <el-row>
       <el-col :offset="2" :span="20">
         <router-view />
@@ -19,6 +19,7 @@ export default {
     // CustomMenu,
   },
   created() {
+    console.log(this.$route.name);
     console.log("base url", process.env.VUE_APP_BASE_URL);
   },
 };
