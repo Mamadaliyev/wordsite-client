@@ -29,7 +29,7 @@
               autocomplete="on"
             ></el-input>
             <el-button class="forgot-text" type="text"
-              >Forgot passowrd?</el-button
+              >Forgot password?</el-button
             >
           </el-form-item>
           <el-form-item>
