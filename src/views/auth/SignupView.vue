@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row class="sign-up">
-      <el-col :span="6">
+      <el-col :xs="18" :sm="10" :lg="6" :xl="4">
         <div style="text-align: center">
           <h2>Sign up</h2>
         </div>
