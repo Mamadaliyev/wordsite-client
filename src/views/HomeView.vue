@@ -1,13 +1,8 @@
 <template>
   <div class="home">
     <el-row type="flex" justify="end">
-      <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4">
-        <el-input
-          suffix-icon="el-icon-search"
-          placeholder="Search"
-          v-model="filter.search"
-          @input.native="getWords"
-        ></el-input>
+      <el-col :xs="24" :sm="12" :md="8" :lg="10" :xl="8">
+        <word-filter v-on:change="handleFilter" />
       </el-col>
     </el-row>
     <el-row v-loading="isLoading" :gutter="10" class="inner-row">
@@ -53,21 +48,21 @@
 
 <script>
 import { wordApi } from "@/api";
+import WordFilter from "@/components/WordFilter.vue";
 
 export default {
   name: "HomeView",
-  components: {},
+  components: { WordFilter },
   data() {
     return {
-      search: "",
       isLoading: false,
       filter: {
-        search: "",
         page: 1,
         limit: 12,
         total: 20,
       },
       words: [],
+      externalFilter: {},
     };
   },
   created() {
@@ -77,12 +72,22 @@ export default {
     handleTag(tag) {
       this.$router.push({ path: `/tags?tag=${tag}` });
     },
+    handleFilter(filter) {
+      this.filter.page = 1;
+      this.externalFilter = filter;
+      this.getWords();
+    },
     async getWords() {
       try {
         this.isLoading = true;
-        const data = await wordApi.getPublicWordsPaging(this.filter);
+        const query = {
+          ...this.filter,
+          ...this.externalFilter,
+        };
+        const data = await wordApi.getPublicWordsPaging(query);
         this.filter.total = data.data.total;
         this.words = data.data.data;
+        window.history.replaceState(null, null, wordApi.makeQueryString(query));
       } catch (e) {
         console.log(e);
       } finally {

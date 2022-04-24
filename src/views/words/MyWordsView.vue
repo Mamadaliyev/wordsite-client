@@ -1,18 +1,13 @@
 <template>
   <div class="my-words">
-    <el-row class="header" type="flex" justify="space-between">
-      <el-col :xl="3" :lg="4" :md="6" :sm="8" :xs="12">
-        <el-button @click="handleAdd" type="primary"
+    <el-row class="header">
+      <el-col :xl="18" :lg="16" :md="12" :sm="12" :xs="24">
+        <el-button class="add-button" @click="handleAdd" type="primary"
           ><i class="el-icon-plus"></i> Add word
         </el-button>
       </el-col>
-      <el-col :xl="3" :lg="4" :md="6" :sm="8" :xs="12">
-        <el-input
-          suffix-icon="el-icon-search"
-          placeholder="Search"
-          v-model="filter.search"
-          @input.native="getMyWords"
-        ></el-input>
+      <el-col :xl="6" :lg="8" :md="12" :sm="12" :xs="24">
+        <word-filter v-on:change="handleFilter" />
       </el-col>
     </el-row>
     <el-row v-if="!isLoading" :gutter="10" class="inner-row">
@@ -60,10 +55,14 @@
         :visible.sync="dialogFormVisible"
       >
         <el-form :model="form">
-          <el-form-item label="Name" :label-width="formLabelWidth">
-            <el-input v-model="form.name" autocomplete="off"></el-input>
+          <el-form-item>
+            <el-input
+              v-model="form.name"
+              placeholder="Name"
+              autocomplete="off"
+            ></el-input>
           </el-form-item>
-          <el-form-item label="Defination" :label-width="formLabelWidth">
+          <el-form-item>
             <el-input
               type="textarea"
               :rows="5"
@@ -72,7 +71,7 @@
             >
             </el-input>
           </el-form-item>
-          <el-form-item label="Tags" :label-width="formLabelWidth">
+          <el-form-item>
             <el-select
               v-model="form.tags"
               style="width: 100%"
@@ -93,7 +92,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label-width="formLabelWidth">
+          <el-form-item>
             <el-checkbox v-model="form.isPrivate">Private</el-checkbox>
           </el-form-item>
         </el-form>
@@ -137,8 +136,10 @@
 
 <script>
 import { tagApi, wordApi } from "@/api";
+import WordFilter from "@/components/WordFilter.vue";
 export default {
   name: "MyWordsView",
+  components: { WordFilter },
   data() {
     return {
       tags: [],
@@ -156,11 +157,11 @@ export default {
       formLabelWidth: "120px",
       myWords: [],
       filter: {
-        search: "",
         page: 1,
         limit: 12,
         total: 20,
       },
+      externalFilter: {},
     };
   },
   created() {
@@ -245,11 +246,17 @@ export default {
         this.isTagLoading = false;
       }
     },
+    handleFilter(filter) {
+      this.filter.page = 1;
+      this.externalFilter = filter;
+      this.getMyWords();
+    },
     async getMyWords() {
       try {
         this.isLoading = true;
         const payload = {
           ...this.filter,
+          ...this.externalFilter,
         };
         const data = await wordApi.getMyWordsPaging(payload);
         this.filter.total = data.data.total;
@@ -272,6 +279,10 @@ export default {
 .my-words {
   .header {
     margin-bottom: 10px;
+    .add-button {
+      margin-bottom: 5px;
+      // width: 100%;
+    }
   }
   .inner-row {
     .el-col {
@@ -316,6 +327,14 @@ export default {
     margin-top: 40px;
     display: flex;
     justify-content: center;
+  }
+}
+</style>
+
+<style lang="scss">
+@media screen and (max-width: 900px) {
+  .el-dialog {
+    width: 90% !important;
   }
 }
 </style>

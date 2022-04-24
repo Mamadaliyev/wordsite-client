@@ -145,7 +145,7 @@ export default {
 
 <style scoped lang="scss">
 .sign-up {
-  margin-top: 80px;
+  margin-top: 10px;
   display: flex;
   justify-content: center;
   align-items: center;

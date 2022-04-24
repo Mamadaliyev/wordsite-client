@@ -2,7 +2,7 @@ import { Api } from "../api";
 
 export class WordApi extends Api {
   getPublicWordsPaging(query) {
-    return this.execute("get", "/word", {}, query);
+    return this.execute("post", "/word/get-paging", query);
   }
   create(data) {
     return this.execute("post", "/word", data);
@@ -14,6 +14,6 @@ export class WordApi extends Api {
     return this.execute("delete", `/word/${id}`);
   }
   getMyWordsPaging(query) {
-    return this.execute("get", "/word/my-words", {}, query);
+    return this.execute("post", "/word/my-words", query);
   }
 }
