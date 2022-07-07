@@ -6,7 +6,7 @@
     "serve": " vue-cli-service serve --mode=development",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "deploy": "scp -r dist root@135.181.200.92:/var/www/wordsite/"
+    "deploy": "scp -i awstest.pem -r dist ubuntu@54.226.37.37:/home/ubuntu/frontend"
   },
   "dependencies": {
     "axios": "^0.26.1",
